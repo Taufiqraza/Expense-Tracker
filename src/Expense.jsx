@@ -4,31 +4,32 @@ const Expense = () => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [expensList, setExpenseList] = useState([]);
-  const [totalAmt,setTotalAmt] = useState(0);
+  const [totalAmt, setTotalAmt] = useState(0);
 
   const addExpense = () => {
     if (!title || !isNaN(title) || !amount) {
       alert('Give Input Correctly')
+    } else {
+      const newExpensList = {
+        id: expensList.length + 1,
+        title: title,
+        amount: parseInt(amount),
+      }
+      const updateList = [...expensList, newExpensList];
+      setExpenseList(updateList);
+      const sum = (acc, num) => {
+        return acc + num.amount;
+      }
+      const total = updateList.reduce(sum, 0);
+      setTotalAmt(total);
+      setTitle("");
+      setAmount("");
     }
-    const newExpensList = {
-      id: expensList.length + 1,
-      title: title,
-      amount: parseInt(amount),
-    }
-    const updateList = [...expensList, newExpensList];
-    setExpenseList(updateList);
-    const sum = (acc,num)=>{
-      return acc+num.amount;
-    }
-    const total = updateList.reduce(sum,0);
-    setTotalAmt(total);
-    setTitle("");
-    setAmount("");
   }
 
-  const handleDelete = (id,amt)=>{
-    setExpenseList(expensList.filter(list=>list.id!==id));
-    setTotalAmt(totalAmt-amt);
+  const handleDelete = (id, amt) => {
+    setExpenseList(expensList.filter(list => list.id !== id));
+    setTotalAmt(totalAmt - amt);
   }
 
   return (
@@ -70,7 +71,7 @@ const Expense = () => {
           <div key={list.id} className="flex justify-between items-center bg-gray-700 p-3 gap-x-5 rounded-md w-full">
             <span>{list.title}</span>
             <span className="text-gray-300">${list.amount}</span>
-            <span onClick={()=>handleDelete(list.id,list.amount)} className="bg-red-700 py-1 px-2 rounded cursor-pointer">Delete</span>
+            <span onClick={() => handleDelete(list.id, list.amount)} className="bg-red-700 py-1 px-2 rounded cursor-pointer">Delete</span>
           </div>
         ))}
       </div>
